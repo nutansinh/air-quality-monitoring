@@ -1,0 +1,42 @@
+.aqi-table {
+  width: 30%;
+  background-color: #ffffff;
+
+  table,
+  th,
+  td {
+    border-collapse: collapse;
+  }
+  table {
+    width: 100%;
+    border-radius: 10px;
+
+    tr {
+      cursor: pointer;
+      &.good {
+        background-color: green;
+      }
+      &.satis {
+        background-color: lightgreen;
+      }
+      &.mod {
+        background-color: yellow;
+      }
+      &.poor {
+        background-color: orange;
+      }
+      &.vpoor {
+        background-color: red;
+      }
+      &.severe {
+        background-color: darkred;
+      }
+    }
+  }
+
+  th,
+  td {
+    padding: 10px;
+    width: 33.33%;
+  }
+}

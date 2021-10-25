@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp');
+
+
+.aqi-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 70px;
+    width: 100%;
+    box-sizing: border-box;
+
+    &__logo {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 20px 30px;
+
+        span {
+            font-size: 48px;
+            color: rebeccapurple;
+        }
+        h2 {
+            color: rebeccapurple;
+        }
+    }
+}
