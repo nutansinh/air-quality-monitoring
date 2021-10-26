@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AqiTable from "./AqiTable/AqiTable";
 import AqiGraph from "./AqiGraph/AqiGraph";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import useWebSocket from "react-use-websocket";
 import "./AQI.scss";
 
 const AQI = () => {
