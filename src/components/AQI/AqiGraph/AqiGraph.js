@@ -37,7 +37,41 @@ const AqiGraph = ({ aqiData, city, initialCity }) => {
     else return "rgba(255, 255, 255, 1)";
   };
 
+  const resetGraphData = () => {
+    setData({
+      labels: [],
+      datasets: [
+        {
+          label: "",
+          data: [],
+          backgroundColor: [],
+          borderColor: [],
+          borderWidth: 1,
+        },
+      ],
+    });
+  };
+
+  const FlushData = () => {
+    setCityData((prev) => {
+      for (let i in prev) {
+        prev[i].ts.length = 0;
+        prev[i].aqi.length = 0;
+        prev[i].bgColor.length = 0;
+      }
+      return prev;
+    });
+  };
+
   const updateDataset = () => {
+    let tempData = {
+      labels: [],
+      label: "",
+      data: [],
+      backgroundColor: [],
+      borderColor: [],
+      borderWidth: 1,
+    };
     for (let mapItem of aqiData) {
       let aqiObj = {
         aqi: Math.ceil(mapItem[1].aqi),
@@ -67,22 +101,15 @@ const AqiGraph = ({ aqiData, city, initialCity }) => {
       }
     }
 
-    let dummyData = {
-      labels: [],
-      label: "",
-      data: [],
-      backgroundColor: [],
-      borderColor: [],
-      borderWidth: 1,
-    };
     if (Object.keys(cityData).length) {
-      dummyData.label = cityData[city].name;
-      dummyData.labels = cityData[city].ts;
-      dummyData.data = cityData[city].aqi;
-      dummyData.backgroundColor = cityData[city].bgColor;
+      tempData.label = cityData[city].name;
+      tempData.labels = cityData[city].ts;
+      tempData.data = cityData[city].aqi;
+      tempData.backgroundColor = cityData[city].bgColor;
     }
 
     let arr = [];
+    // condition for showing AQI graph inidividually/comparison
     if (initialCity) {
       for (let item in cityData) {
         arr.push({
@@ -96,9 +123,9 @@ const AqiGraph = ({ aqiData, city, initialCity }) => {
     } else {
       arr = [
         {
-          backgroundColor: dummyData.backgroundColor,
-          label: dummyData.label,
-          data: dummyData.data,
+          backgroundColor: tempData.backgroundColor,
+          label: tempData.label,
+          data: tempData.data,
           borderColor: [],
           borderWidth: 1,
         },
@@ -107,7 +134,7 @@ const AqiGraph = ({ aqiData, city, initialCity }) => {
 
     setData((prev) => ({
       ...prev,
-      labels: dummyData.labels,
+      labels: tempData.labels,
       datasets: arr,
     }));
   };
@@ -117,20 +144,17 @@ const AqiGraph = ({ aqiData, city, initialCity }) => {
   }, [aqiData]);
 
   useEffect(() => {
-    setData({
-      labels: [],
-      datasets: [
-        {
-          label: "",
-          data: [],
-          backgroundColor: [],
-          borderColor: [],
-          borderWidth: 1,
-        },
-      ],
-    });
+    resetGraphData();
     updateDataset();
   }, [city]);
+
+  useEffect(() => {
+    // flushing stale data after every 10 minutes
+    const interval = setInterval(() => {
+      FlushData();
+    }, 600000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="aqi-graph">
